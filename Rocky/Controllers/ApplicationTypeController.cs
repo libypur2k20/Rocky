@@ -47,5 +47,63 @@ namespace Rocky.Controllers
                 return View(appType);
             }
         }
+
+
+        //GET - EDIT
+        public IActionResult Edit(int id)
+        {
+            ApplicationType appType = (id > 0 ? _dbContext.ApplicationType.Find(id) : null);
+
+            return (appType != null ? View(appType) : NotFound());
+        }
+
+
+        //POST - EDIT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(ApplicationType appType)
+        {
+            if(appType != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    _dbContext.ApplicationType.Update(appType);
+                    _dbContext.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(appType);
+                }
+            }
+
+            return NotFound();
+        }
+
+
+        //GET - DELETE
+        public IActionResult Delete(int id)
+        {
+            ApplicationType appType = (id > 0 ? _dbContext.ApplicationType.Find(id) : null);
+            return (appType != null ? View(appType) : NotFound());
+        }
+
+
+        //POST - DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(ApplicationType appType)
+        {
+            if(appType != null)
+            {
+                _dbContext.ApplicationType.Remove(appType);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }
